@@ -6,13 +6,15 @@ import java.io.IOException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import essencials.ConfigurationParser;
+import essencials.FileManager;
+
 import static org.junit.Assert.*;
 import weka.core.AttributeStats;
 import weka.core.Instances;
 import imputation.Imputation;
 import imputation.Impute;
-import util.ConfigurationParser;
-import util.FileManager;
 
 /**
  *

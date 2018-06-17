@@ -13,13 +13,31 @@
 $configuration_file
 
 ##Files info
-$input_dir "files/datasets/"
-$output_dir "files/results/"
+$input_dir "files/datasets/amputed/"
+$output_dir "files/datasets/imputed/"
 
 ##Parameters
 $num_folds 2
 $save_fitness yes
 $imputation_type NGP
+
+##Core info for RMSE and NRMSE
+$imp_dir "test/datasets/imputed/"
+$amp_dir "test/datasets/amputed/"
+$ori_dir "test/datasets/originals/"
+$imp_types EC KMI MC
+
+##Type of operations. It can be INFO for summary, AMP for amputation, 
+##RMSE for RMSE evaluation and ACOR for autocorrelation evaluation
+$operation INFO
+
+##Type of the dataset. It can be CL for classification or TS for time series.
+##It MUST be specified for AMP operation.
+$datasets_type TS
+
+##Missing values rate. It can be any integer between 0 and 90. 
+##It MUST be specified for AMP operation.
+$mv_rate 5
 
 ##List of datasets to be managed. If flag is ALL, all datasets in the specified input directory
 ##will be considered. If they are specifically specified by name 
@@ -28,4 +46,4 @@ $imputation_type NGP
 ##(e.g. $dataset_name ALL and then @$dataset_name istanbul_stock) will consider all
 ##datasets in the specified input directory except for istanbul_stock.
 
-$dataset_name ALL
+$dataset_name amp_5_AAL_RSS_1-user-movement

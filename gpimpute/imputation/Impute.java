@@ -13,11 +13,11 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import essencials.FileManager;
 import evolution.EvolutionProcess;
 import evolution.OneImpute;
 import preimputation.Interpolation;
 import preimputation.ValidNeighbor;
-import util.FileManager;
 import util.TriplicateDataset;
 import weka.core.AttributeStats;
 import weka.core.Instances;
@@ -126,7 +126,7 @@ public class Impute implements Imputation {
             outFolder = new File(System.getProperty("user.dir") + "/files/results/fitness/");
             outFolder.mkdir();
         
-            FileManager.writeFile(fitness, outFolder.getAbsolutePath() + "/ft" + 
+            FileManager.saveTextInfo(fitness, outFolder.getAbsolutePath() + "/ft" + 
                     datasetName.substring(3) + "_att_" + i + "_fold_" + fold + flag + ".txt");
 
         } catch (IOException ex) {
@@ -138,7 +138,7 @@ public class Impute implements Imputation {
 
     @Override
     public void saveResult(Instances dataset, int fold, String flag) throws FileNotFoundException, IOException{
-        FileManager.writeFile(dataset.toString(), System.getProperty("user.dir") + "/files/results/imp_" + 
+        FileManager.saveDataset(dataset, System.getProperty("user.dir") + "/files/results/imp_" + 
 		dataset.relationName() + "-" + (fold-1) + flag + ".arff");
     }
 }

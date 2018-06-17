@@ -17,7 +17,7 @@ import ec.Individual;
 import ec.gp.GPIndividual;
 import ec.simple.SimpleStatistics;
 import ec.util.ParameterDatabase;
-import util.FileManager;
+import essencials.FileManager;
 import util.TreeEvaluation;
 
 import java.io.BufferedReader;
@@ -106,7 +106,7 @@ public class EvolutionProcess {
             outFolder = new File(System.getProperty("user.dir") + "/files/results/trees/");
             outFolder.mkdir();
         
-            FileManager.writeFile(((GPIndividual)bestInd).trees[0].child.makeLispTree() + "\n\n\n\nArvore: \n" 
+            FileManager.saveTextInfo(((GPIndividual)bestInd).trees[0].child.makeLispTree() + "\n\n\n\nArvore: \n" 
                     + ((GPIndividual)bestInd).trees[0].child.makeLatexTree(), outFolder.getAbsolutePath() 
                             + "/tree" + mvdataset.relationName().substring(3) + "_att_" + index + ".txt");
         } catch (IOException ex) {

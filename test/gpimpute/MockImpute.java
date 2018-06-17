@@ -5,13 +5,13 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import essencials.FileManager;
 import imputation.Imputation;
 import imputation.Impute;
 import weka.core.AttributeStats;
 import weka.core.Instances;
 import preimputation.Interpolation;
 import preimputation.ValidNeighbor;
-import util.FileManager;
 
 /**
  *
@@ -60,7 +60,7 @@ public class MockImpute implements Imputation {
     @Override
     public void saveFitnessStatus(String datasetName, int i, int fold, String flag) throws FileNotFoundException, IOException {
 		String fitness = "mock mock mock";            
-	        FileManager.writeFile(fitness, System.getProperty("user.dir") + "/test/gpimpute/mockFiles/results/fitness/" + 
+	        FileManager.saveTextInfo(fitness, System.getProperty("user.dir") + "/test/gpimpute/mockFiles/results/fitness/" + 
 	            datasetName + "-" + i + "-" + (fold-1) + flag + ".txt");
     }
     
@@ -77,7 +77,7 @@ public class MockImpute implements Imputation {
 
     @Override
     public void saveResult(Instances dataset, int fold, String flag) throws IOException {
-    	FileManager.writeFile(dataset.toString(), System.getProperty("user.dir") + "/test/gpimpute/mockFiles/results/imp_" + 
+    	FileManager.saveDataset(dataset, System.getProperty("user.dir") + "/test/gpimpute/mockFiles/results/imp_" + 
     			dataset.relationName() + "-" + (fold-1) + flag + ".arff");
     }
     

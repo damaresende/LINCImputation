@@ -15,8 +15,8 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import util.ConfigurationParser;
-import util.FileManager;
+import essencials.ConfigurationParser;
+import essencials.FileManager;
 import weka.core.Instances;
 
 public class Main {
@@ -39,13 +39,13 @@ public class Main {
 		    	for(int i = 0; i < config.getNumFolds(); i++) {
 				    if(config.isLGPImpute()) {
 						System.out.println("Running LGPImpute " + config.getNumFolds() + " times.");
-						FileManager.writeFile(imp.runLGP(data, config.saveFitness(), i).toString(), 
+						FileManager.saveTextInfo(imp.runLGP(data, config.saveFitness(), i).toString(), 
 							config.getOutputDir() + "i" + file.substring(1) 
 								+ "-" + i + "-LGP.arff");
 				    }
 				    else if(config.isNGPImpute()) {
 						System.out.println("Running GPImpute " + config.getNumFolds() + " times.");
-						FileManager.writeFile(imp.runGP(data, config.saveFitness(), i).toString(), 
+						FileManager.saveTextInfo(imp.runGP(data, config.saveFitness(), i).toString(), 
 							config.getOutputDir() + "i" + file.substring(1) 
 								+ "-" + i + "-NGP.arff");
 				    }

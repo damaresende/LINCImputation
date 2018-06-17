@@ -5,8 +5,9 @@ import org.junit.After;
 import org.junit.Before;
 import static org.junit.Assert.*;
 import org.junit.Test;
+
+import essencials.FileManager;
 import weka.core.Instances;
-import util.FileManager;
 import util.TriplicateDataset;
 
 /**
