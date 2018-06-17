@@ -1,0 +1,51 @@
+# Copyright 2006 by Sean Luke and George Mason University
+# Licensed under the Academic Free License version 3.0
+# See the file "LICENSE" for more information
+
+parent.0=koza.params
+stat.file=out.stat
+
+#parent.0=@ec.gp.koza.KozaFitness koza.params
+pop.subpop.0.species.numpipes=3
+pop.subpop.0.species.pipe.0=ec.gp.koza.CrossoverPipeline
+pop.subpop.0.species.pipe.0.prob=0.75
+pop.subpop.0.species.pipe.1=ec.gp.koza.ReproductionPipeline
+pop.subpop.0.species.pipe.1.prob=0.20
+pop.subpop.1.species.pipe.2 = ec.gp.koza.MutationPipeline
+pop.subpop.0.species.pipe.2.prob=0.05
+# the next four items are already defined in koza.params, but we
+# put them here to be clear.
+
+# We have one function set, of class GPFunctionSet
+gp.fs.size=1
+gp.fs.0=ec.gp.GPFunctionSet
+# We'll call the function set "f0".
+gp.fs.0.name=f0
+
+# We have nine functions in the function set.  They are:
+gp.fs.0.size=7
+gp.fs.0.func.0=terminals.FeatureERC
+gp.fs.0.func.0.nc=nc0
+gp.fs.0.func.1=terminals.ConstERC
+gp.fs.0.func.1.nc=nc0
+gp.fs.0.func.2=functions.Add
+gp.fs.0.func.2.nc=nc2
+gp.fs.0.func.3=functions.Sub
+gp.fs.0.func.3.nc=nc2
+gp.fs.0.func.4=functions.Mul
+gp.fs.0.func.4.nc=nc2
+gp.fs.0.func.5=functions.Div
+gp.fs.0.func.5.nc=nc2
+gp.fs.0.func.6=functions.Abs
+gp.fs.0.func.6.nc=nc1
+#gp.fs.0.func.7=functions.Sin
+#gp.fs.0.func.7.nc=nc1
+#gp.fs.0.func.8=functions.Cos
+#gp.fs.0.func.8.nc=nc1
+#gp.fs.0.func.9=functions.Exp
+#gp.fs.0.func.9.nc=nc1
+#gp.fs.0.func.7=functions.Sqrt
+#gp.fs.0.func.7.nc=nc1
+
+eval.problem=evolution.OneImpute
+eval.problem.data=evolution.DoubleData

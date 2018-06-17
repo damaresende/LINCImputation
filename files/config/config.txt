@@ -1,0 +1,31 @@
+# This configuration file has the necessary parameters for running the
+# LINC imputation projects. It has to start with the line 
+# $configuration_file to be valid and every parameter has to have a "$"
+# at the beginning of it. The input and output directories are defined
+# first, than the dataset file type and names. For the dataset name
+# every name must be defined with the flag $dataset_name or with
+# $dataset_name ALL, which means that all valid files in the input directory
+# must be considered.
+#
+# THIS FILE IS INCOMPLETE, IT HAS ONLY THE NECESSARY INFO FOR SOME PROJECTS, 
+# ALTHOUGH IT CAN BE EXPANDED 
+
+$configuration_file
+
+##Files info
+$input_dir "files/datasets/"
+$output_dir "files/results/"
+
+##Parameters
+$num_folds 2
+$save_fitness yes
+$imputation_type NGP
+
+##List of datasets to be managed. If flag is ALL, all datasets in the specified input directory
+##will be considered. If they are specifically specified by name 
+##(e.g. $dataset_name istanbul_stock), only they will be considered. If they are 
+##specifically specified with a '@' before the tag name, they will be disregarded.
+##(e.g. $dataset_name ALL and then @$dataset_name istanbul_stock) will consider all
+##datasets in the specified input directory except for istanbul_stock.
+
+$dataset_name ALL
