@@ -51,8 +51,7 @@ public class Main {
 				System.out.println("Results saved to " + config.getOutputDir() + "autocorrelation.csv");
 		    } else if(config.isSummary()) {
 				System.out.println("Building summary...");
-				DataSummary info = new DataSummary();
-				String result = info.statisticalSummary(config);
+				String result = DataSummary.statisticalSummary(config, ";");
 				FileManager.saveTextInfo(result,config.getOutputDir() + "summary.csv");
 				System.out.println("Summary saved to " + config.getOutputDir() + "summary.csv");
 		    } else {

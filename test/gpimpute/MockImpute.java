@@ -1,5 +1,6 @@
 package gpimpute;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -8,6 +9,7 @@ import java.util.logging.Logger;
 import essencials.FileManager;
 import imputation.Imputation;
 import imputation.Impute;
+import imputation.Main;
 import weka.core.AttributeStats;
 import weka.core.Instances;
 import preimputation.Interpolation;
@@ -59,9 +61,21 @@ public class MockImpute implements Imputation {
     
     @Override
     public void saveFitnessStatus(String datasetName, int i, int fold, String flag) throws FileNotFoundException, IOException {
-		String fitness = "mock mock mock";            
-	        FileManager.saveTextInfo(fitness, System.getProperty("user.dir") + "/test/gpimpute/mockFiles/results/fitness/" + 
-	            datasetName + "-" + i + "-" + (fold-1) + flag + ".txt");
+		String fitness = "mock mock mock";   
+		
+		try {
+            File outFolder = new File(System.getProperty("user.dir") + "/mockFiles/results/");
+            outFolder.mkdir();
+            
+            outFolder = new File(System.getProperty("user.dir") + "/mockFiles/results/fitness/");
+            outFolder.mkdir();
+        
+            FileManager.saveTextInfo(fitness, outFolder.getAbsolutePath() + "/ft" + 
+                    datasetName.substring(3) + "_att_" + i + "_fold_" + fold + flag + ".txt");
+
+        } catch (IOException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     @Override
@@ -77,8 +91,16 @@ public class MockImpute implements Imputation {
 
     @Override
     public void saveResult(Instances dataset, int fold, String flag) throws IOException {
-    	FileManager.saveDataset(dataset, System.getProperty("user.dir") + "/test/gpimpute/mockFiles/results/imp_" + 
-    			dataset.relationName() + "-" + (fold-1) + flag + ".arff");
+    	try {
+            File outFolder = new File(System.getProperty("user.dir") + "/mockFiles/results/");
+            outFolder.mkdir();
+        
+            FileManager.saveDataset(dataset, outFolder.getAbsolutePath() + "/imp_" + 
+            		dataset.relationName() + "-" + (fold-1) + flag + ".arff");
+
+        } catch (IOException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
 }

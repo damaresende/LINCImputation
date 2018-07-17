@@ -13,6 +13,10 @@ package data_management;
 import essencials.ConfigurationParser;
 import essencials.FileManager;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.MessageFormat;
+
 import weka.core.AttributeStats;
 import weka.core.Instances;
 
@@ -26,36 +30,67 @@ public class DataSummary {
      * Analyze a list of datasets and give a summary of the relevant information: 
      * name, number of attributes, number of instances, number of categorical attributes,
      * number of numeric attributes, number of attributes with missing values, number of
-     * categoric attributes with missing values, number of numeric attributes with missing values
+     * categorical attributes with missing values, number of numeric attributes with missing values
      * and number of instances with missing values.
      * 
-     * @param config
-     * @return 
+     * @param config configuration
+     * @return string with the summary
      * @throws java.io.IOException
      */
-    public String statisticalSummary(ConfigurationParser config) throws IOException {
-        String fullInfo = "DatasetName,#Atts,#Instances,#CategoricAtts,#NumericAtts"
-                        + ",#AttsWithMVs,#CategoricalAttsWithMVs,#NumericAttsWithMVs,"
-                        + "#IntancesWithMVs,%InstancesWithMVs,#MVs, %MVs\n";
+    public static String statisticalSummary(ConfigurationParser config, String separator) throws IOException {
+        String fullInfo = getHeader(separator) + "\n";
        
 		for(String file : config.getFileNames()) {
-		    String info = "";
 		    Instances data = FileManager.loadFile(config.getInputDir() + file);
-		    data.setClassIndex(data.numAttributes() - 1);
+		    String info = datasetStatisticalSummary(data, separator);
 	
-		    int num = numInstancesWithMVs(data);
-	                
-		    info += file +  ", " + data.numAttributes()
-			    + ", " + data.numInstances() + ", " + numCategoricalAtts(data)
-			    + ", " + numNumericAtts(data) + ", " + numAttsWithMVs(data)
-			    + ", " + numCategoricalAttsWithMVs(data) + ", "
-			    + numNumericAttsWithMVs(data) + ", " + num + ", " 
-			    + num*100.0/data.numInstances() + "%," + numMissingValues(data);
-	
-		    fullInfo += info + "," + numMissingValues(data)*100.0/(data.numAttributes()*data.numInstances()) + "\n";
+		    fullInfo += info + "\n";
 	        }
 		    
 		return fullInfo;
+    }
+    
+    /**
+     * Gets the header with the name of the columns that in the summary table
+     * 
+     * @param separator column separator
+     * @return string with the header
+     * @throws java.io.IOException
+     */
+    public static String getHeader(String separator) {
+        return MessageFormat.format("DatasetName{0}#Atts{0}#Instances{0}#CategoricAtts{0}" +
+        		"#NumericAtts{0}#AttsWithMVs{0}#CategoricalAttsWithMVs{0}#NumericAttsWithMVs{0}" + 
+        		"#IntancesWithMVs{0}%InstancesWithMVs{0}#MVs{0}%MVs", ";");
+    }
+    
+    /**
+     * Gets the information of a dataset and stores it in a string where each column
+     * is separated by the indicated separator. The string includes the following data:
+     * dataset name, number of attributes, number of instances, number of categorical attributes,
+     * number of numerical attributes, number of attributes with missing values, number of categorical
+     * attributes with missing values, number of numerical attributes with missing values, number of
+     * instances with missing values, percentage of instances with missing values, number of missing values,
+     * percentage of missing values
+     * 
+     * @param separator column separator
+     * @return string with the information about the dataset.
+     * @throws java.io.IOException
+     */
+    public static String datasetStatisticalSummary(Instances data, String separator) {
+    	String info = "";
+    	data.setClassIndex(data.numAttributes() - 1);
+	    int num = numInstancesWithMVs(data);
+	    
+	    info += data.relationName() +  separator + data.numAttributes()
+	    + separator + data.numInstances() + separator + numCategoricalAtts(data)
+	    + separator + numNumericAtts(data) + separator + numAttsWithMVs(data)
+	    + separator + numCategoricalAttsWithMVs(data) + separator
+	    + numNumericAttsWithMVs(data) + separator + num + separator 
+	    + round(num*100.0/data.numInstances(),3) + "%," + numMissingValues(data);
+
+	    info += separator + round(percentageOfMVs(data),3);
+	    
+    	return info;
     }
     
     /**
@@ -170,5 +205,30 @@ public class DataSummary {
                 count++;
         }
         return count;
+    }
+    
+    /**
+     * Rounds double values by setting it to a specific number of decimal places
+     * 
+     * @param value value
+     * @param places number of decimal places
+     * @return 
+     */
+    public static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
+    }
+    
+    /**
+     * Calculates the percentage of missing values
+     * 
+     * @param data input dataset
+     * @return 
+     */
+    public static double percentageOfMVs(Instances data) {
+        return numMissingValues(data)*100.0/(data.numAttributes()*data.numInstances());
     }
 }

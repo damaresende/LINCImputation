@@ -27,7 +27,7 @@ public class TestImpute {
     
     @Before
     public void setUp() throws IOException {
-    	dataset = FileManager.loadFile(System.getProperty("user.dir") + "/test/gpimpute/mockFiles/datasets/amp_05_AAL_RSS_1-user-movement.arff");
+    	dataset = FileManager.loadFile(System.getProperty("user.dir") + "/mockFiles/datasets/amp_05_AAL_RSS_1-user-movement.arff");
     }
     
     @After
@@ -73,29 +73,28 @@ public class TestImpute {
     
     @Test
     public void saveFitnessStatus(){
-		/* uncomment the following lines if you want to test the real class
-		  BE CAREFUL, it will delete all file in /files/results/fitness/ */
-		
-		//ip = new Impute(); 
+		/* uncomment the following lines if you want to test the real class */
+		//ip = new Impute();
 		//File dir = new File(System.getProperty("user.dir") + "/files/results/fitness/");
 		
 		ip = new MockImpute(); //faster test but it is just a mock test
-		File dir = new File(System.getProperty("user.dir") + "/test/gpimpute/mockFiles/results/fitness/");
+		File dir = new File(System.getProperty("user.dir") + "/mockFiles/results/fitness/");
 		
-		for(File file: dir.listFiles()) 
-		    if (!file.isDirectory()) 
-			file.delete();
-		assertEquals(0,dir.listFiles().length);
-		
+		if(dir.exists()) {
+			for(File file: dir.listFiles()) 
+			    if (!file.isDirectory()) 
+				file.delete();
+			assertEquals(0,dir.listFiles().length);
+		}
 		int numAttsWithMV = getNumAttsWithMVs(dataset);
 		
 		ip.runLGP(dataset,true,1);
-		assertEquals(numAttsWithMV,dir.listFiles().length);
+		assertEquals(numAttsWithMV, dir.listFiles().length);
     }
     
     @Test
     public void saveResult() throws FileNotFoundException, IOException{
-		ConfigurationParser config = new ConfigurationParser(System.getProperty("user.dir") + "/test/gpimpute/mockFiles/config/config.txt");
+		ConfigurationParser config = new ConfigurationParser(System.getProperty("user.dir") + "/mockFiles/config/config.txt");
 		config.readConfiguration();
 		
 		//ip = new Impute(); //use this if you want to test the real class
@@ -103,7 +102,7 @@ public class TestImpute {
 		for (int fold = 1; fold <= config.getNumFolds(); fold++ ) {
 			ip.saveResult(ip.runLGP(dataset, true, fold), fold, "-LGP");
 		}
-		File dir = new File(System.getProperty("user.dir") + "/test/gpimpute/mockFiles/results/");
+		File dir = new File(System.getProperty("user.dir") + "/mockFiles/results/");
 		assertEquals(config.getNumFolds(),countArff(dir));
     }
     

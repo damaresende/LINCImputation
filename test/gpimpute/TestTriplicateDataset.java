@@ -20,7 +20,7 @@ public class TestTriplicateDataset {
     
     @Before
     public void setUp() throws IOException {
-		dataset = FileManager.loadFile(System.getProperty("user.dir") + "/test/gpimpute/mockFiles/datasets/amp_05_AAL_RSS_1-user-movement.arff");
+		dataset = FileManager.loadFile(System.getProperty("user.dir") + "/mockFiles/datasets/amp_05_AAL_RSS_1-user-movement.arff");
 		td = new TriplicateDataset(dataset);
     }
     
@@ -69,9 +69,6 @@ public class TestTriplicateDataset {
 			newData.instance(shift).value(dataset.numAttributes()),0.001);
 		assertEquals(dataset.instance(dataset.numInstances()-1-shift).value(att), 
 			newData.instance(newData.numInstances()-1).value(dataset.numAttributes()),0.001);
-		
-	//	for(int i = 0; i < newData.numInstances(); i++)
-	//	    System.out.println(newData.instance(i).value(dataset.numAttributes()));
     }
     
     @Test

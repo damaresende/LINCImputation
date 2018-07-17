@@ -13,8 +13,8 @@
 $configuration_file
 
 ##Files info
-$input_dir "files/datasets/"
-$output_dir "files/results/"
+$input_dir "mockFiles/datasets/"
+$output_dir "mockFiles/results/"
 
 ##Parameters
 $num_folds 2
