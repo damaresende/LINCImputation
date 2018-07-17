@@ -11,6 +11,7 @@
 **/
 package imputation;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,21 +34,26 @@ public class Main {
 		try {
 		    Impute imp = new Impute();
 		    config.readConfiguration();
+		    
+		    File resultPath = new File(config.getOutputDir());
+		    resultPath.mkdir();
+		    
+		    File imputedPath = new File(config.getOutputDir() + "/imputed/");
+		    imputedPath.mkdir();
+		    
 		    for(String file : config.getFileNames()) {
 		    	Instances data = FileManager.loadFile(config.getInputDir() + file);
 				
 		    	for(int i = 0; i < config.getNumFolds(); i++) {
 				    if(config.isLGPImpute()) {
 						System.out.println("Running LGPImpute " + config.getNumFolds() + " times.");
-						FileManager.saveTextInfo(imp.runLGP(data, config.saveFitness(), i).toString(), 
-							config.getOutputDir() + "i" + file.substring(1) 
-								+ "-" + i + "-LGP.arff");
+						FileManager.saveTextInfo(imp.runLGP(data, config.saveFitness(), i, resultPath.getAbsolutePath()).toString(), 
+							config.getOutputDir() + "/imputed/i" + file.substring(1) + "-" + i + "-LGP.arff");
 				    }
 				    else if(config.isNGPImpute()) {
 						System.out.println("Running GPImpute " + config.getNumFolds() + " times.");
-						FileManager.saveTextInfo(imp.runGP(data, config.saveFitness(), i).toString(), 
-							config.getOutputDir() + "i" + file.substring(1) 
-								+ "-" + i + "-NGP.arff");
+						FileManager.saveTextInfo(imp.runGP(data, config.saveFitness(), i, resultPath.getAbsolutePath()).toString(), 
+							config.getOutputDir() + "/imputed/i" + file.substring(1) + "-" + i + "-NGP.arff");
 				    }
 				    else System.out.println("Invalid operation. You may choose NGP or LGP");
 				}

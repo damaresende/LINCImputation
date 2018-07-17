@@ -15,8 +15,8 @@ import weka.core.Instances;
  */
 public interface Imputation {
     
-    Instances runGP(Instances dataset, boolean saveFitness, int fold);
-    Instances runLGP(Instances dataset, boolean saveFitness, int fold);
+    Instances runGP(Instances dataset, boolean saveFitness, int fold, String resultPath);
+    Instances runLGP(Instances dataset, boolean saveFitness, int fold, String resultPath);
     void saveFitnessStatus(String datasetName, int i, int fold, String flag) throws FileNotFoundException, IOException;
     Instances removeInstancesWithMV(Instances dataset, int att);
     void saveResult(Instances dataset, int fold, String flag) throws FileNotFoundException, IOException;

@@ -21,8 +21,11 @@ import preimputation.ValidNeighbor;
  */
 public class MockImpute implements Imputation {
 
+	private String resultPath = System.getProperty("user.dir");
+	
     @Override
-    public Instances runGP(Instances dataset, boolean saveFitness, int fold) {
+    public Instances runGP(Instances dataset, boolean saveFitness, int fold, String resultPath) {
+    	this.resultPath = resultPath;
 		Instances result = new Instances(dataset);
 	
 		for(int i = 1; i < dataset.numAttributes(); i++) {
@@ -40,7 +43,8 @@ public class MockImpute implements Imputation {
     }
 
     @Override
-    public Instances runLGP(Instances dataset, boolean saveFitness, int fold) {
+    public Instances runLGP(Instances dataset, boolean saveFitness, int fold, String resultPath) {
+    	this.resultPath = resultPath;
 		Instances result = new Instances(dataset);
 		
 		for(int i = 1; i < dataset.numAttributes(); i++) {
@@ -64,10 +68,10 @@ public class MockImpute implements Imputation {
 		String fitness = "mock mock mock";   
 		
 		try {
-            File outFolder = new File(System.getProperty("user.dir") + "/mockFiles/results/");
+            File outFolder = new File(resultPath);
             outFolder.mkdir();
             
-            outFolder = new File(System.getProperty("user.dir") + "/mockFiles/results/fitness/");
+            outFolder = new File(resultPath + "/fitness/");
             outFolder.mkdir();
         
             FileManager.saveTextInfo(fitness, outFolder.getAbsolutePath() + "/ft" + 
@@ -92,7 +96,7 @@ public class MockImpute implements Imputation {
     @Override
     public void saveResult(Instances dataset, int fold, String flag) throws IOException {
     	try {
-            File outFolder = new File(System.getProperty("user.dir") + "/mockFiles/results/");
+            File outFolder = new File(resultPath);
             outFolder.mkdir();
         
             FileManager.saveDataset(dataset, outFolder.getAbsolutePath() + "/imp_" + 

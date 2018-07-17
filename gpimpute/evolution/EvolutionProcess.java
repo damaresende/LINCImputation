@@ -45,7 +45,7 @@ public class EvolutionProcess {
         EvolutionState state;
         ParameterDatabase parameters;
         
-        String args[] = {"-file", System.getProperty("user.dir") + "/files/params/GPImpute.params"};
+        String args[] = {"-file", System.getProperty("user.dir") + "/files/params/gpimpute.params"};
         int job = 0;
         double fitness;
         

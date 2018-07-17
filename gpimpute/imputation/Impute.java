@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,7 +30,7 @@ import weka.core.Instances;
 public class Impute implements Imputation {
 
     @Override
-    public Instances runGP(Instances dataset, boolean saveFitness, int fold) {
+    public Instances runGP(Instances dataset, boolean saveFitness, int fold, String resultPath) {
 		Instances result = new Instances(dataset);
 		
 		OneImpute.mvdataset = result;
@@ -55,6 +56,20 @@ public class Impute implements Imputation {
 				}
 		    }
 		}
+		try {
+			File statusPath = new File(resultPath + "/status/");
+			statusPath.mkdir();
+		    
+			FileManager.copyFile(System.getProperty("user.dir") + "/files/params/out.stat", 
+			statusPath.getAbsolutePath() + "/output_" + result.relationName() + "_fold_" + fold + ".stat");
+			
+			File file = new File(System.getProperty("user.dir") + "/files/params/out.stat");
+		    Files.deleteIfExists(file.toPath());
+	    
+	    } catch (IOException ex) {
+		    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	    
 		return result;
     }
     
@@ -69,7 +84,7 @@ public class Impute implements Imputation {
     }
 
     @Override
-    public Instances runLGP(Instances dataset, boolean saveFitness, int fold) {
+    public Instances runLGP(Instances dataset, boolean saveFitness, int fold, String resultPath) {
 		Instances result = new Instances(dataset);
 		TriplicateDataset td = new TriplicateDataset(result);
 		td.triplicateDataset(result);
@@ -99,6 +114,21 @@ public class Impute implements Imputation {
 		    }
 		}
 		td.reduceData(result);
+		
+		try {
+			File statusPath = new File(resultPath + "/status/");
+			statusPath.mkdir();
+		    
+			FileManager.copyFile(System.getProperty("user.dir") + "/files/params/out.stat", 
+			statusPath.getAbsolutePath() + "/output_" + result.relationName() + "_fold_" + fold + ".stat");
+			
+			File file = new File(System.getProperty("user.dir") + "/files/params/out.stat");
+		    Files.deleteIfExists(file.toPath());
+	    
+	    } catch (IOException ex) {
+		    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		
 		return result;
     }
     

@@ -11,9 +11,13 @@ package essencials;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import weka.core.Instances;
 
 public class FileManager {
@@ -78,5 +82,16 @@ public class FileManager {
             writer.write(data);
             writer.flush();
         }
+    }
+    
+    /**
+     * Copies a file from a source to a destination
+     * 
+     * @param sourcePath source path
+     * @param destinationPath destination path
+     * @throws java.io.IOException
+     */
+    public static void copyFile(String sourcePath, String destinationPath) throws IOException {
+        Files.copy(Paths.get(sourcePath), new FileOutputStream(destinationPath));
     }
 }

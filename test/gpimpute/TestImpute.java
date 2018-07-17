@@ -24,10 +24,17 @@ public class TestImpute {
     
     Instances dataset;
     Imputation ip;
+    String resultPath;
     
     @Before
     public void setUp() throws IOException {
-    	dataset = FileManager.loadFile(System.getProperty("user.dir") + "/mockFiles/datasets/amp_05_AAL_RSS_1-user-movement.arff");
+    	ConfigurationParser config = new ConfigurationParser(System.getProperty("user.dir") + "/mockFiles/config/config.txt");
+    	config.readConfiguration();
+    	dataset = FileManager.loadFile(config.getInputDir() + "amp_05_AAL_RSS_1-user-movement.arff");
+    	
+    	File resultPath = new File(config.getOutputDir());
+	    resultPath.mkdir();
+	    this.resultPath = resultPath.getAbsolutePath();
     }
     
     @After
@@ -36,7 +43,7 @@ public class TestImpute {
     }
 
     @Test
-    public void ignoreMissing(){
+    public void ignoreMissing() {
 		ip = new Impute();
 		for(int i = 0; i < dataset.numAttributes(); i++) {
 		    Instances ignoreMissingData = ip.removeInstancesWithMV(dataset, i);
@@ -47,9 +54,9 @@ public class TestImpute {
     
     @Test
     public void imputeByGP(){
-		// ip = new Impute(); //use this if you want to test the real class
+		//ip = new Impute(); //use this if you want to test the real class
 		ip = new MockImpute(); //faster test but it is just a mock test
-		Instances imputedData = ip.runGP(dataset, false, 1);
+		Instances imputedData = ip.runGP(dataset, false, 1, resultPath);
 		assertNotNull(imputedData);
 		
 		for(int i = 0; i < imputedData.numAttributes(); i++) {
@@ -60,9 +67,9 @@ public class TestImpute {
     
     @Test
     public void imputeByLGP(){
-		// ip = new Impute(); //use this if you want to test the real class
+		//ip = new Impute(); //use this if you want to test the real class
 		ip = new MockImpute(); //faster test but it is just a mock test
-		Instances imputedData = ip.runLGP(dataset, false, 1);
+		Instances imputedData = ip.runLGP(dataset, false, 1, resultPath);
 		assertNotNull(imputedData);
 		
 		for(int i = 0; i < imputedData.numAttributes(); i++) {
@@ -78,7 +85,7 @@ public class TestImpute {
 		//File dir = new File(System.getProperty("user.dir") + "/files/results/fitness/");
 		
 		ip = new MockImpute(); //faster test but it is just a mock test
-		File dir = new File(System.getProperty("user.dir") + "/mockFiles/results/fitness/");
+		File dir = new File(resultPath + "/fitness/");
 		
 		if(dir.exists()) {
 			for(File file: dir.listFiles()) 
@@ -88,7 +95,7 @@ public class TestImpute {
 		}
 		int numAttsWithMV = getNumAttsWithMVs(dataset);
 		
-		ip.runLGP(dataset,true,1);
+		ip.runLGP(dataset,true,1,resultPath);
 		assertEquals(numAttsWithMV, dir.listFiles().length);
     }
     
@@ -100,9 +107,9 @@ public class TestImpute {
 		//ip = new Impute(); //use this if you want to test the real class
 		ip = new MockImpute(); //faster test but it is just a mock test
 		for (int fold = 1; fold <= config.getNumFolds(); fold++ ) {
-			ip.saveResult(ip.runLGP(dataset, true, fold), fold, "-LGP");
+			ip.saveResult(ip.runLGP(dataset, true, fold, resultPath), fold, "-LGP");
 		}
-		File dir = new File(System.getProperty("user.dir") + "/mockFiles/results/");
+		File dir = new File(resultPath);
 		assertEquals(config.getNumFolds(),countArff(dir));
     }
     
