@@ -106,6 +106,8 @@ public class ConfigurationParser {
 		isToEvaluateRMSE = false;
 		isToEvaluateNRMSE = false;
 		isToEvaluateAutocorrelation = false;
+		
+		this.readConfiguration();
     }
    
     
