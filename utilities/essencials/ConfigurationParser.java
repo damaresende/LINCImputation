@@ -82,6 +82,8 @@ public class ConfigurationParser {
 		isToEvaluateRMSE = false;
 		isToEvaluateNRMSE = false;
 		isToEvaluateAutocorrelation = false;
+		
+		this.readConfiguration();
     }
     
     /**
@@ -154,124 +156,137 @@ public class ConfigurationParser {
      * @return true the configuration file is valid and false otherwise
      * @throws java.io.IOException
      */
-    public boolean readConfiguration() throws IOException {
+    protected boolean readConfiguration() {
     	Path path = Paths.get(CONFIG_FILE);
         boolean isValid = false;
+        BufferedReader reader = null;
         
-        BufferedReader reader = Files.newBufferedReader(path, ENCODING);
+        try {
+        	reader = Files.newBufferedReader(path, ENCODING);
+        } catch(IOException e) {
+        	System.err.println("ERROR! Config file was not found.");
+        	return false;
+        }
+        
         String line;
         boolean isAll = false;
         boolean isPart = false;
-        while ((line = reader.readLine()) != null) {
-		    // is valid and is info to be read
-        	if(isValid && line.startsWith("$")) {
-				String[] flag = line.split(" ");
-				switch (flag[0]) {
-				    case "$input_dir":
-				    	INPUT_DIR = System.getProperty("user.dir") + File.separator + fixFlag(flag); 
-				    	break;
-				    case "$output_dir":
-				    	OUTPUT_DIR = System.getProperty("user.dir") + File.separator + fixFlag(flag);
-				    	break;
-				    case "$dataset_name":
-				    	if(flag[1].compareTo("ALL") == 0) {
-				    		isAll = getAllFileNames();
-				    	} else {
-				    		isPart = true;
-				    		FILES.add(fixFlag(flag) + ".arff");
-				    	}
-				    	if(isPart && isAll) {
-				    		FILES.clear();
-				    		isValid = false;
-				    	} break;
-				    case "$imputation_type":
-				    	if(flag[1].compareTo("NGP") == 0) {
-				    		isNGPImpute = true;
-				    	} else if(flag[1].compareTo("LGP") == 0) {
-				    		isLGPImpute = true;
-				    	} else {
-				    		System.err.println("Error. Invalid type. \'$datasets_type\' must be" + " NGP or LGP.");
-				    	} break;    
-				    case "$num_folds":
-				    	numFolds = Integer.parseInt(flag[1]);
-				    	break;
-				    case "$save_fitness":
-				    	saveFitness = flag[1].compareTo("yes")==0;
-				    	break;
-				    case "$datasets_type":
-						if(flag[1].compareTo("CL") == 0) {
-						    isClassification = true;
-						} else if(flag[1].compareTo("TS") == 0) {
-						    isTimeSeries = true;
-						} else {
-						    System.err.println("Error. Invalid type. \'$datasets_type\' must be"
-							    + " CL or TS.");
-						} break;    
-				    case "$imp_types":
-						imp_types = new String[flag.length-1];
-						for(int i = 1; i < flag.length; i++)
-						    imp_types[i-1] = flag[i];
-						break;    
-				    case "$mv_rate":
-						mvRate = Integer.parseInt(flag[1]);
-						if(mvRate < 0)
-						    throw new InvalidMVRateException("Error. MV rate mus be grater than 0.");
-						else if(mvRate > 90)
-						    throw new InvalidMVRateException("Error. MV rate mus be less than 90.");
+        try {
+			while ((line = reader.readLine()) != null) {
+			    // is valid and is info to be read
+				if(isValid && line.startsWith("$")) {
+					String[] flag = line.split(" ");
+					switch (flag[0]) {
+					    case "$input_dir":
+					    	INPUT_DIR = System.getProperty("user.dir") + File.separator + fixFlag(flag); 
+					    	break;
+					    case "$output_dir":
+					    	OUTPUT_DIR = System.getProperty("user.dir") + File.separator + fixFlag(flag);
+					    	break;
+					    case "$dataset_name":
+					    	if(flag[1].compareTo("ALL") == 0) {
+					    		isAll = getAllFileNames();
+					    	} else {
+					    		isPart = true;
+					    		FILES.add(fixFlag(flag) + ".arff");
+					    	}
+					    	if(isPart && isAll) {
+					    		FILES.clear();
+					    		isValid = false;
+					    	} break;
+					    case "$imputation_type":
+					    	if(flag[1].compareTo("NGP") == 0) {
+					    		isNGPImpute = true;
+					    	} else if(flag[1].compareTo("LGP") == 0) {
+					    		isLGPImpute = true;
+					    	} else {
+					    		System.err.println("Error. Invalid type. \'$datasets_type\' must be" + " NGP or LGP.");
+					    	} break;    
+					    case "$num_folds":
+					    	numFolds = Integer.parseInt(flag[1]);
+					    	break;
+					    case "$save_fitness":
+					    	saveFitness = flag[1].compareTo("yes")==0;
+					    	break;
+					    case "$datasets_type":
+							if(flag[1].compareTo("CL") == 0) {
+							    isClassification = true;
+							} else if(flag[1].compareTo("TS") == 0) {
+							    isTimeSeries = true;
+							} else {
+							    System.err.println("Error. Invalid type. \'$datasets_type\' must be"
+								    + " CL or TS.");
+							} break;    
+					    case "$imp_types":
+							imp_types = new String[flag.length-1];
+							for(int i = 1; i < flag.length; i++)
+							    imp_types[i-1] = flag[i];
+							break;    
+					    case "$mv_rate":
+							mvRate = Integer.parseInt(flag[1]);
+							if(mvRate < 0)
+							    throw new InvalidMVRateException("Error. MV rate mus be grater than 0.");
+							else if(mvRate > 90)
+							    throw new InvalidMVRateException("Error. MV rate mus be less than 90.");
+							break;
+					    case "$amp_dir":
+							AMPUTATION_DIR = System.getProperty("user.dir") + File.separator 
+								+ fixFlag(flag); 
+							break;
+					    case "$imp_dir":
+							IMPUTATION_DIR = System.getProperty("user.dir") + File.separator 
+								+ fixFlag(flag); 
+							break;
+					    case "$ori_dir":
+							ORIGINALS_DIR = System.getProperty("user.dir") + File.separator 
+								+ fixFlag(flag); 
+							break;
+					    case "$acor_lag":
+							H = Integer.parseInt(flag[1]);
+							break;
+					    case "$operation":
+							if(flag[1].compareTo("AMP") == 0)
+							    isToAmpute = true;
+							else if(flag[1].compareTo("RMSE") == 0)
+							    isToEvaluateRMSE = true;
+							else if(flag[1].compareTo("ACOR") == 0)
+							    isToEvaluateAutocorrelation = true;
+							else if(flag[1].compareTo("NRMSE") == 0)
+							    isToEvaluateNRMSE = true;
+							else if(flag[1].compareTo("INFO") == 0)
+							    isSummary = true;
+							else
+							    System.err.println("Error! Invalid operation type. "
+								    + "It must be INFO, AMP, RMSE, NRMSE or ACOR.");
+							break;       
+					    default:
+					    	System.out.println("ERROR! INVALID FLAG!");
+					    	isValid = false;
+					    	break;
+					}
+				// not a comment and has the validation flag
+			    } else if(!line.startsWith("#") && (line.compareTo("$configuration_file") == 0)) {
+			    	isValid = true;
+			    //not a comment, not a blank line and does not have a validation flag
+			    } else if(!line.startsWith("#") && (line.compareTo("") != 0) && !isValid) {
+			    	System.out.println("ERROR! Invalid configuration file");
+			    	break;
+			    } else if(isValid && line.startsWith("@")) {
+			    	String[] flag = line.split(" ");
+					if(flag[0].compareTo("@$dataset_name") == 0) {
+					    IGNORE.add(flag[1]);
+					    System.out.println("> Skipping file: " + flag[1]);
+					} else {
+						System.out.println("ERROR! Invalid configuration file");
 						break;
-				    case "$amp_dir":
-						AMPUTATION_DIR = System.getProperty("user.dir") + File.separator 
-							+ fixFlag(flag); 
-						break;
-				    case "$imp_dir":
-						IMPUTATION_DIR = System.getProperty("user.dir") + File.separator 
-							+ fixFlag(flag); 
-						break;
-				    case "$ori_dir":
-						ORIGINALS_DIR = System.getProperty("user.dir") + File.separator 
-							+ fixFlag(flag); 
-						break;
-				    case "$acor_lag":
-						H = Integer.parseInt(flag[1]);
-						break;
-				    case "$operation":
-						if(flag[1].compareTo("AMP") == 0)
-						    isToAmpute = true;
-						else if(flag[1].compareTo("RMSE") == 0)
-						    isToEvaluateRMSE = true;
-						else if(flag[1].compareTo("ACOR") == 0)
-						    isToEvaluateAutocorrelation = true;
-						else if(flag[1].compareTo("NRMSE") == 0)
-						    isToEvaluateNRMSE = true;
-						else if(flag[1].compareTo("INFO") == 0)
-						    isSummary = true;
-						else
-						    System.err.println("Error! Invalid operation type. "
-							    + "It must be INFO, AMP, RMSE, NRMSE or ACOR.");
-						break;       
-				    default:
-				    	System.out.println("ERROR! INVALID FLAG!");
-				    	isValid = false;
-				    	break;
-				}
-			// not a comment and has the validation flag
-		    } else if(!line.startsWith("#") && (line.compareTo("$configuration_file") == 0)) {
-		    	isValid = true;
-		    //not a comment, not a blank line and does not have a validation flag
-		    } else if(!line.startsWith("#") && (line.compareTo("") != 0) && !isValid) {
-		    	System.out.println("ERROR! Invalid configuration file");
-		    	break;
-		    } else if(isValid && line.startsWith("@")) {
-		    	String[] flag = line.split(" ");
-				if(flag[0].compareTo("@$dataset_name") == 0) {
-				    IGNORE.add(flag[1]);
-				    System.out.println("> Skipping file: " + flag[1]);
-				} else {
-					System.out.println("ERROR! Invalid configuration file");
-					break;
-				}
-		    }
-        }  
+					}
+			    }
+			}
+		} catch (NumberFormatException e) {
+			System.err.println("Value could not be parsed. " + e.getMessage());
+		} catch (IOException e) {
+			System.err.println("Error reading configuration file.");
+		}  
         
         IGNORE.stream().forEach((s) -> {
         	for(int i = 0; i < FILES.size(); i++)
@@ -288,6 +303,11 @@ public class ConfigurationParser {
      */
     private boolean getAllFileNames() {
         File folder = new File(INPUT_DIR);
+        if(!folder.exists() || (folder.exists() && !folder.isDirectory())) {
+        	System.err.println("Error! Input directory does not exists.");
+        	return false;
+        }
+        
         File[] listOfFiles = folder.listFiles();
 
         for (File file : listOfFiles) {
@@ -295,6 +315,7 @@ public class ConfigurationParser {
                 FILES.add(file.getName());
             }
         }
+    	
         return (!FILES.isEmpty());
     }
     

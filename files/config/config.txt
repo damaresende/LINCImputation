@@ -14,6 +14,7 @@ $configuration_file
 
 ##Files info
 $input_dir "files/datasets/amputed/"
+$ori_dir "files/datasets/originals/"
 $output_dir "files/results/"
 
 ##Parameters

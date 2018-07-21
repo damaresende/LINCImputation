@@ -33,7 +33,6 @@ public class Main {
 		
 		try {
 		    Impute imp = new Impute();
-		    config.readConfiguration();
 		    
 		    File resultPath = new File(config.getOutputDir());
 		    resultPath.mkdir();

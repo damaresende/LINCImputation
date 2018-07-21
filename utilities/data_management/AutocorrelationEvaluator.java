@@ -17,14 +17,14 @@ import weka.core.Instances;
  *
  * @author damares
  */
-class AutocorrelationEvaluator {
+public class AutocorrelationEvaluator {
 
     public String compareAutocorrelation(String fileName, ConfigurationParser config) throws IOException {
 	
-		File fTest = new File(config.getOriginalsDir() + fileName + ".arff");
+		File fTest = new File(config.getOriginalsDir() + fileName);
 		if(!fTest.exists())
-		    return "@Original " + fileName + " NOT FOUND!";
-		Instances original = FileManager.loadFile(config.getOriginalsDir() + fileName + ".arff");
+		    return "@Original " + fTest.getAbsolutePath() + " NOT FOUND!";
+		Instances original = FileManager.loadFile(config.getOriginalsDir() + fileName);
 		
 		String result = fileName;
 		DecimalFormat dec = new DecimalFormat("0.000");

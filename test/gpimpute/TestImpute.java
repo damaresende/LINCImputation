@@ -29,7 +29,6 @@ public class TestImpute {
     @Before
     public void setUp() throws IOException {
     	ConfigurationParser config = new ConfigurationParser(System.getProperty("user.dir") + "/mockFiles/config/config.txt");
-    	config.readConfiguration();
     	dataset = FileManager.loadFile(config.getInputDir() + "amp_05_AAL_RSS_1-user-movement.arff");
     	
     	File resultPath = new File(config.getOutputDir());
@@ -102,7 +101,6 @@ public class TestImpute {
     @Test
     public void saveResult() throws FileNotFoundException, IOException{
 		ConfigurationParser config = new ConfigurationParser(System.getProperty("user.dir") + "/mockFiles/config/config.txt");
-		config.readConfiguration();
 		
 		//ip = new Impute(); //use this if you want to test the real class
 		ip = new MockImpute(); //faster test but it is just a mock test

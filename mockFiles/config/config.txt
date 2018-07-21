@@ -13,7 +13,8 @@
 $configuration_file
 
 ##Files info
-$input_dir "mockFiles/datasets/"
+$input_dir "mockFiles/datasets/amputed/"
+$ori_dir "mockFiles/datasets/originals/"
 $output_dir "mockFiles/results/"
 
 ##Parameters

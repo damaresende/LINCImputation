@@ -6,6 +6,7 @@ import org.junit.Before;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
+import essencials.ConfigurationParser;
 import essencials.FileManager;
 import weka.core.Instances;
 import util.TriplicateDataset;
@@ -17,10 +18,13 @@ import util.TriplicateDataset;
 public class TestTriplicateDataset {
     Instances dataset;
     TriplicateDataset td;
+    static ConfigurationParser config;
     
     @Before
     public void setUp() throws IOException {
-		dataset = FileManager.loadFile(System.getProperty("user.dir") + "/mockFiles/datasets/amp_05_AAL_RSS_1-user-movement.arff");
+    	config = new ConfigurationParser(System.getProperty("user.dir") + "/mockFiles/config/config.txt");
+		
+		dataset = FileManager.loadFile(config.getInputDir() + "amp_05_AAL_RSS_1-user-movement.arff");
 		td = new TriplicateDataset(dataset);
     }
     

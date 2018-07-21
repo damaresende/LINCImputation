@@ -25,8 +25,6 @@ public class Main {
 			config = new ConfigurationParser(args[0]);
 			    
 		try {
-		    config.readConfiguration();
-		    
 		    if(config.isToAmpute()) {
 				System.out.println("Applying amputation...\n");
 				Amputator amp = new Amputator();

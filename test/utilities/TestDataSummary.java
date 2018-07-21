@@ -19,7 +19,6 @@ class TestDataSummary {
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 		config = new ConfigurationParser(System.getProperty("user.dir") + "/mockFiles/config/config.txt");
-		config.readConfiguration();
 	}
 
 	@Test
