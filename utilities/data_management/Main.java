@@ -23,6 +23,8 @@ public class Main {
 		ConfigurationParser config = new ConfigurationParser();
 		if(args.length == 1)
 			config = new ConfigurationParser(args[0]);
+		
+		String separator = ";";
 			    
 		try {
 		    if(config.isToAmpute()) {
@@ -32,19 +34,19 @@ public class Main {
 		    } else if(config.isToEvaluateRMSE()) {
 				System.out.println("Applying RMSE evaluation...\n");
 				RMSEEvaluator eval = new RMSEEvaluator();
-				String result = eval.compareListOfDatasets(config);
+				String result = eval.compareListOfDatasets(config, separator);
 				FileManager.saveTextInfo(result,config.getOutputDir() + "rmse.csv");
 				System.out.println("Results saved to " + config.getOutputDir() + "rmse.csv");
 		    } else if(config.isToEvaluateNRMSE()) {
 				System.out.println("Applying NRMSE evaluation...\n");
 				RMSEEvaluator eval = new RMSEEvaluator();
-				String result = eval.compareListOfDatasetsNormalized(config);
+				String result = eval.compareListOfDatasetsNormalized(config, separator);
 				FileManager.saveTextInfo(result,config.getOutputDir() + "nrmse.csv");
 				System.out.println("Results saved to " + config.getOutputDir() + "nrmse.csv");
 		    } else if(config.isToEvaluateAutocorrelation()) {
 				System.out.println("Applying autocorrelation evaluation...");
 				AutocorrelationEvaluator acor = new AutocorrelationEvaluator();
-				String result = acor.compareListOfDatasets(config);
+				String result = acor.compareListOfDatasets(config, separator);
 				FileManager.saveTextInfo(result,config.getOutputDir() + "autocorrelation.csv");
 				System.out.println("Results saved to " + config.getOutputDir() + "autocorrelation.csv");
 		    } else if(config.isSummary()) {

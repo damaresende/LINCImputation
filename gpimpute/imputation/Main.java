@@ -41,18 +41,20 @@ public class Main {
 		    imputedPath.mkdir();
 		    
 		    for(String file : config.getFileNames()) {
-		    	Instances data = FileManager.loadFile(config.getInputDir() + file);
+		    	Instances data = FileManager.loadFile(config.getInputDir() + "amp_" + config.getMVRate() + "_" + file);
 				
 		    	for(int i = 0; i < config.getNumFolds(); i++) {
 				    if(config.isLGPImpute()) {
 						System.out.println("Running LGPImpute " + config.getNumFolds() + " times.");
 						FileManager.saveTextInfo(imp.runLGP(data, config.saveFitness(), i, resultPath.getAbsolutePath()).toString(), 
-							config.getOutputDir() + "/imputed/i" + file.substring(1) + "-" + i + "-LGP.arff");
+							config.getOutputDir() + "/imputed/imp_" + config.getMVRate() + "_" + file.substring(0, file.indexOf(".arff")) 
+							+ "_" + i + "_LGP.arff");
 				    }
 				    else if(config.isNGPImpute()) {
 						System.out.println("Running GPImpute " + config.getNumFolds() + " times.");
 						FileManager.saveTextInfo(imp.runGP(data, config.saveFitness(), i, resultPath.getAbsolutePath()).toString(), 
-							config.getOutputDir() + "/imputed/i" + file.substring(1) + "-" + i + "-NGP.arff");
+							config.getOutputDir() + "/imputed/imp_" + config.getMVRate() + "_" + file.substring(0, file.indexOf(".arff")) 
+							+ "_" + i + "_NGP.arff");
 				    }
 				    else System.out.println("Invalid operation. You may choose NGP or LGP");
 				}

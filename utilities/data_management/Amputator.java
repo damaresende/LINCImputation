@@ -67,14 +67,14 @@ public class Amputator {
     
     public void amputeListOfFiles (ConfigurationParser info) throws IOException {
 		for(String file : info.getFileNames()) {
-		    Instances data = FileManager.loadFile(info.getInputDir() + file + ".arff");
+		    Instances data = FileManager.loadFile(info.getOriginalsDir() + file);
 		    if(info.isClassification()) {
 				Instances newData = amputeDatasetClassification(data, info.getMVRate());
-				FileManager.saveDataset(newData, (info.getOutputDir() + "amp_" + info.getMVRate() + "_" +  file + ".arff"));
+				FileManager.saveDataset(newData, (info.getAmputationDir() + "amp_" + info.getMVRate() + "_" +  file + ".arff"));
 				System.out.println("Amputed " + info.getMVRate() + "% of: "+ file + ".arff");
 		    } else if(info.isTimeSeries()) {
 				Instances newData = amputeDatasetTimeSeries(data, info.getMVRate());
-				FileManager.saveDataset(newData, (info.getOutputDir() + "amp_" + info.getMVRate() + "_" +  file + ".arff"));
+				FileManager.saveDataset(newData, (info.getAmputationDir() + "amp_" + info.getMVRate() + "_" +  file + ".arff"));
 				System.out.println("Amputed " + info.getMVRate() + "% of: "+ file + ".arff");
 		    } else {
 				System.err.println("Error! File type not identified. "

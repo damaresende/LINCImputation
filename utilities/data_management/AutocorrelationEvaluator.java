@@ -19,38 +19,51 @@ import weka.core.Instances;
  */
 public class AutocorrelationEvaluator {
 
-    public String compareAutocorrelation(String fileName, ConfigurationParser config) throws IOException {
+    public String compareAutocorrelation(String fileName, ConfigurationParser config, String separator) throws IOException {
 	
-		File fTest = new File(config.getOriginalsDir() + fileName);
+    	if(fileName.endsWith(".arff")) {
+    		fileName = fileName.substring(0, fileName.indexOf(".arff"));
+    	}
+    	
+    	File fTest = new File(config.getOriginalsDir() + fileName + ".arff");
 		if(!fTest.exists())
-		    return "@Original " + fTest.getAbsolutePath() + " NOT FOUND!";
-		Instances original = FileManager.loadFile(config.getOriginalsDir() + fileName);
+		    return "@Original " + fileName + " NOT FOUND!";
+		    
+		Instances original = FileManager.loadFile(config.getOriginalsDir() + fileName + ".arff");
 		
-		String result = fileName;
+		String result = "";
 		DecimalFormat dec = new DecimalFormat("0.000");
 		
-		for(String type : config.getImputeTypes()) {
-		    fTest = new File(config.getImputationDir() + "imp_" 
-			    + config.getMVRate() + "_" + fileName + "-" + type + ".arff");
-		    if(!fTest.exists())
-		    	result += "," + Double.NaN;
-		    else {
-				Instances imputed = FileManager.loadFile(config.getImputationDir() + "imp_" 
-					+ config.getMVRate() + "_" + fileName + "-" + type + ".arff");
-	
-				result += "," + dec.format(autocorrelationAbsDifference(imputed, original, config.getH()));
-		    }
+		
+		for(int i = 0; i < config.getNumFolds(); i++) {
+			String name = "imp_" + config.getMVRate() + "_" + fileName + "_" + i;
+			
+			result += name;
+			for(String type : config.getImputeTypes()) {
+			    fTest = new File(config.getImputationDir() + "/" + name + "_" + type + ".arff");
+			    
+			    if(!fTest.exists()) {
+			    	result += separator + Double.NaN;
+			    	continue;
+			    }
+			    	
+				Instances imputed = FileManager.loadFile(fTest.getAbsolutePath());				
+				result += separator + dec.format(autocorrelationAbsDifference(imputed, original, config.getH()));
+			}
+			result += "\n";
+			
 		}
 		return result;
     }
 
-    public String compareListOfDatasets(ConfigurationParser config) throws IOException {
+    public String compareListOfDatasets(ConfigurationParser config, String separator) throws IOException {
 		String result = "Dataset";
 		for(String type : config.getImputeTypes())
-		    result += "," + type;
+		    result += separator + type;
 		
+		result += "\n";
 		for(String fileName : config.getFileNames()) {
-		    result += "\n" + compareAutocorrelation(fileName, config);
+		    result += compareAutocorrelation(fileName, config, separator);
 		}
 		
 		return result;

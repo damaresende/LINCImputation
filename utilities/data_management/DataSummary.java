@@ -41,7 +41,7 @@ public class DataSummary {
         String fullInfo = getHeader(separator) + "\n";
        
 		for(String file : config.getFileNames()) {
-		    Instances data = FileManager.loadFile(config.getInputDir() + file);
+		    Instances data = FileManager.loadFile(config.getInputDir() + "amp_" + config.getMVRate() + "_" + file);
 		    String info = datasetStatisticalSummary(data, separator);
 	
 		    fullInfo += info + "\n";
@@ -60,7 +60,7 @@ public class DataSummary {
     public static String getHeader(String separator) {
         return MessageFormat.format("DatasetName{0}#Atts{0}#Instances{0}#CategoricAtts{0}" +
         		"#NumericAtts{0}#AttsWithMVs{0}#CategoricalAttsWithMVs{0}#NumericAttsWithMVs{0}" + 
-        		"#IntancesWithMVs{0}%InstancesWithMVs{0}#MVs{0}%MVs", ";");
+        		"#IntancesWithMVs{0}%InstancesWithMVs{0}#MVs{0}%MVs", separator);
     }
     
     /**
@@ -86,7 +86,8 @@ public class DataSummary {
 	    + separator + numNumericAtts(data) + separator + numAttsWithMVs(data)
 	    + separator + numCategoricalAttsWithMVs(data) + separator
 	    + numNumericAttsWithMVs(data) + separator + num + separator 
-	    + round(num*100.0/data.numInstances(),3) + "%," + numMissingValues(data);
+	    + round(num*100.0/data.numInstances(), 3) + separator 
+	    + numMissingValues(data);
 
 	    info += separator + round(percentageOfMVs(data),3);
 	    

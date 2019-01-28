@@ -12,39 +12,41 @@
 
 $configuration_file
 
-##Files info
+## Files info
 $input_dir "files/datasets/amputed/"
 $ori_dir "files/datasets/originals/"
 $output_dir "files/results/"
 
-##Parameters
-$num_folds 2
+## Parameters
+$num_folds 3
 $save_fitness yes
-$imputation_type NGP
+$imputation_type LGP
 
-##Core info for RMSE and NRMSE
-$imp_dir "test/datasets/imputed/"
-$amp_dir "test/datasets/amputed/"
-$ori_dir "test/datasets/originals/"
-$imp_types EC KMI MC
+## Core info for RMSE and NRMSE
+$imp_dir "files/results/imputed/"
+$amp_dir "files/datasets/amputed/"
+$ori_dir "files/datasets/originals/"
+$imp_types NGP LGP
 
-##Type of operations. It can be INFO for summary, AMP for amputation, 
-##RMSE for RMSE evaluation and ACOR for autocorrelation evaluation
+## Type of operations. It can be INFO for summary, AMP for amputation, 
+## RMSE for RMSE evaluation and ACOR for autocorrelation evaluation
 $operation INFO
+$acor_lag 7
 
-##Type of the dataset. It can be CL for classification or TS for time series.
-##It MUST be specified for AMP operation.
+## Type of the dataset. It can be CL for classification or TS for time series.
+## It MUST be specified for AMP operation.
 $datasets_type TS
 
-##Missing values rate. It can be any integer between 0 and 90. 
-##It MUST be specified for AMP operation.
+## Missing values rate. It can be any integer between 0 and 90. 
+## It MUST be specified for AMP operation.
 $mv_rate 5
 
-##List of datasets to be managed. If flag is ALL, all datasets in the specified input directory
-##will be considered. If they are specifically specified by name 
-##(e.g. $dataset_name istanbul_stock), only they will be considered. If they are 
-##specifically specified with a '@' before the tag name, they will be disregarded.
-##(e.g. $dataset_name ALL and then @$dataset_name istanbul_stock) will consider all
-##datasets in the specified input directory except for istanbul_stock.
+## List of datasets to be managed. If flag is ALL, all datasets in the specified input directory
+## will be considered. If they are specifically specified by name 
+## (e.g. $dataset_name istanbul_stock), only they will be considered. If they are 
+## specifically specified with a '@' before the tag name, they will be disregarded.
+## (e.g. $dataset_name ALL and then @$dataset_name istanbul_stock) will consider all
+## datasets in the specified input directory except for istanbul_stock.
 
-$dataset_name amp_5_AAL_RSS_1-user-movement
+$dataset_name AAL_RSS_1-user-movement
+$dataset_name climb-stairsADL-wrist-worn

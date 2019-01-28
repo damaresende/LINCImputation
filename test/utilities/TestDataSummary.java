@@ -1,11 +1,11 @@
 package utilities;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 
 import java.io.IOException;
 
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import data_management.DataSummary;
 import essencials.ConfigurationParser;
@@ -16,7 +16,7 @@ class TestDataSummary {
 
 	static ConfigurationParser config;
 	
-	@BeforeAll
+	@BeforeClass
 	static void setUpBeforeClass() throws Exception {
 		config = new ConfigurationParser(System.getProperty("user.dir") + "/mockFiles/config/config.txt");
 	}
