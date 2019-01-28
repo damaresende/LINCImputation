@@ -40,7 +40,7 @@ public class AutocorrelationEvaluator {
 			
 			result += name;
 			for(String type : config.getImputeTypes()) {
-			    fTest = new File(config.getImputationDir() + "/" + name + "_" + type + ".arff");
+			    fTest = new File(config.getImputationDir() + File.separator + name + "_" + type + ".arff");
 			    
 			    if(!fTest.exists()) {
 			    	result += separator + Double.NaN;

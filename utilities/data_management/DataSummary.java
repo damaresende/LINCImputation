@@ -12,6 +12,8 @@ package data_management;
 
 import essencials.ConfigurationParser;
 import essencials.FileManager;
+
+import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -40,12 +42,19 @@ public class DataSummary {
     public static String statisticalSummary(ConfigurationParser config, String separator) throws IOException {
         String fullInfo = getHeader(separator) + "\n";
        
-		for(String file : config.getFileNames()) {
-		    Instances data = FileManager.loadFile(config.getInputDir() + "amp_" + config.getMVRate() + "_" + file);
-		    String info = datasetStatisticalSummary(data, separator);
-	
-		    fullInfo += info + "\n";
-	        }
+        File folder = new File(config.getInputDir());
+        File[] listOfFiles = folder.listFiles();
+        
+		for(String fileName : config.getFileNames()) {
+			for(File file : listOfFiles) {
+				if(file.getName().contains(fileName)) {
+				    Instances data = FileManager.loadFile(file.getAbsolutePath());
+				    String info = datasetStatisticalSummary(data, separator);
+			
+				    fullInfo += info + "\n";
+		        }
+			}
+		}
 		    
 		return fullInfo;
     }
