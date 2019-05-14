@@ -1,1 +1,5 @@
 # LINCImputation
+
+Time series have been used in several applications such as process control, environment monitoring, financial analysis and scientific researches. However, in the presence of missing data, this study may become more complex due to a strong break of correlation among samples. Therefore, this work proposes an imputation method for time series using Genetic Programming (GP) and Lagrange Interpolation. The heuristic adopted builds an interpretable regression model that explores time series statistical features such as mean, variance and auto-correlation. It also makes use of interrelation among multivariate time series to estimate missing values. Results show that the proposed method is promising, being capable of imputing data without loosing the dataset's statistical properties, as well as allowing a better understanding of the missing data pattern from the obtained interpretable model.
+
+More details can be found in the [published article](https://ieeexplore.ieee.org/document/7839581).
